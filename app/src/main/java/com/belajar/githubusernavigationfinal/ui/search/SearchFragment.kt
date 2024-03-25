@@ -25,6 +25,7 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
 //    private val viewModel: SearchViewModel by viewModels()
+    private var allItems: List<UserEntity> = emptyList()
 
 
     override fun onCreateView(
@@ -63,7 +64,6 @@ class SearchFragment : Fragment() {
                 .setOnEditorActionListener { v, actionId, event ->
                     searchBar.setText(searchView.text)
                     searchView.hide()
-                    viewModel.getDataSearch(searchBar.text.toString())
                     viewModel.getDataSearch(searchBar.text.toString()).observe(viewLifecycleOwner) {
                         if (it!= null){
                             when (it){
@@ -73,7 +73,8 @@ class SearchFragment : Fragment() {
                                 is Result.Success -> {
                                     binding.progressBar.visibility = View.GONE
                                     val userData = it.data
-                                    adapter.submitList(userData)
+                                        adapter.submitList(userData)
+
                                 }
                                 is Result.Failure -> {
                                     binding.progressBar.visibility = View.GONE
@@ -88,12 +89,6 @@ class SearchFragment : Fragment() {
                     }
                     true
                 }
-            val ivFavorite: ImageView = requireActivity().findViewById(R.id.iv_favorite)
-            ivFavorite.setOnClickListener {
-                homeViewModel.getFavorite().observe(viewLifecycleOwner) {
-                    adapter.submitList(it)
-                }
-            }
         }
 
 //        viewModel.loading.observe(viewLifecycleOwner) {
@@ -109,10 +104,10 @@ class SearchFragment : Fragment() {
 //        binding.rvContainerSearch.adapter = adapter
 //    }
 
-    private fun showLoading(value: Boolean) {
-        if (value) binding.progressBar.visibility =
-            View.VISIBLE else binding.progressBar.visibility = View.INVISIBLE
-    }
+//    private fun showLoading(value: Boolean) {
+//        if (value) binding.progressBar.visibility =
+//            View.VISIBLE else binding.progressBar.visibility = View.INVISIBLE
+//    }
 
     override fun onDestroy() {
         super.onDestroy()

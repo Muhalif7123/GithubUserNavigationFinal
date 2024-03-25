@@ -65,7 +65,7 @@ class UserRepository private constructor(
         } catch (e: Exception) {
             Log.d("UserRepository", "getDataSearch: ${e.message.toString()}")
         }
-        val localMemoryData: LiveData<Result<List<UserEntity>>> = userDao.getUser().map { Result.Success(it) }
+        val localMemoryData: LiveData<Result<List<UserEntity>>> = userDao.getUserByNoFavorite().map { Result.Success(it) }
         emitSource(localMemoryData)
     }
 

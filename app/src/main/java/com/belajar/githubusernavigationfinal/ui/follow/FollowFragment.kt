@@ -5,34 +5,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.belajar.githubusernavigationfinal.R
-import com.belajar.githubusernavigationfinal.ViewModelFactory
-import com.belajar.githubusernavigationfinal.data.Result
 import com.belajar.githubusernavigationfinal.data.adapter.FollowAdapter
-import com.belajar.githubusernavigationfinal.data.adapter.HomeAdapter
 import com.belajar.githubusernavigationfinal.data.adapter.SectionPagerAdapter
-import com.belajar.githubusernavigationfinal.data.adapter.UserAdapter
-import com.belajar.githubusernavigationfinal.data.entity.UserEntity
 import com.belajar.githubusernavigationfinal.data.response.ItemsItem
 import com.belajar.githubusernavigationfinal.databinding.FragmentFollowBinding
 import com.belajar.githubusernavigationfinal.ui.DetailViewModel
 
 
 class FollowFragment : Fragment() {
-    private var _binding: FragmentFollowBinding? = null
-    private val binding get() = _binding!!
-//    private lateinit var binding: FragmentFollowBinding
+
+    private lateinit var binding: FragmentFollowBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentFollowBinding.inflate(inflater, container, false)
+        binding = FragmentFollowBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -51,7 +43,6 @@ class FollowFragment : Fragment() {
 
 
         val position = arguments?.getInt(SectionPagerAdapter.SECTION_NO)
-        val apiId = arguments?.getString("login")
         if (position == 0) {
             viewModel.followings.observe(viewLifecycleOwner) {
                 recyclerViewTab(it)
@@ -125,10 +116,5 @@ class FollowFragment : Fragment() {
     private fun showLoading(value: Boolean) {
         if (value) binding.progressBar.visibility =
             View.VISIBLE else binding.progressBar.visibility = View.INVISIBLE
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

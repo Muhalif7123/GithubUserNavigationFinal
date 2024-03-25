@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -32,10 +33,10 @@ class FollowAdapter: ListAdapter<ItemsItem, FollowAdapter.ViewHolder>(DIFF_CALLB
 
             }
     }
-    class ViewHolder(private val binding: ItemUserListBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(val binding: ItemUserListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItem(user: ItemsItem) {
             binding.tvName.text = user.login
-                Glide.with(binding.root.context)
+            Glide.with(binding.root.context)
                 .load(user.avatarUrl)
                 .into(binding.cvAvatar)
             binding.cardView.setOnClickListener {
@@ -54,13 +55,14 @@ class FollowAdapter: ListAdapter<ItemsItem, FollowAdapter.ViewHolder>(DIFF_CALLB
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: FollowAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val viewHolderItem = getItem(position)
         holder.bindItem(viewHolderItem)
         holder.itemView.setOnClickListener {
             val moveIntent = Intent(holder.itemView.context, DetailActivity::class.java)
-            moveIntent.putExtra("login", viewHolderItem.login)
+            moveIntent.putExtra("id", viewHolderItem.login)
             holder.itemView.context.startActivity(moveIntent)
         }
+        holder.binding.ivFavorite.visibility = View.GONE
     }
 }

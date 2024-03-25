@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.belajar.githubusernavigationfinal.data.adapter.UserAdapter
 import com.belajar.githubusernavigationfinal.data.entity.UserEntity
 import com.belajar.githubusernavigationfinal.data.response.ItemsItem
 import com.belajar.githubusernavigationfinal.databinding.FragmentSearchBinding
+import com.belajar.githubusernavigationfinal.ui.home.HomeViewModel
 
 class SearchFragment : Fragment() {
 
@@ -40,11 +42,21 @@ class SearchFragment : Fragment() {
         val viewModel: SearchViewModel by viewModels {
             factory
         }
-        val adapter = UserAdapter()
+        val homeViewModel: HomeViewModel by viewModels {
+            factory
+        }
+        val adapter = UserAdapter{
+            if (it.favorite) {
+                homeViewModel.deleteUser(it)
+            } else {
+                homeViewModel.saveUser(it)
+            }
+        }
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvContainerSearch.adapter = adapter
         binding.rvContainerSearch.layoutManager = layoutManager
         with(binding) {
+            binding.progressBar.visibility = View.GONE
             searchView.setupWithSearchBar(searchBar)
             searchView
                 .editText
@@ -76,6 +88,12 @@ class SearchFragment : Fragment() {
                     }
                     true
                 }
+            val ivFavorite: ImageView = requireActivity().findViewById(R.id.iv_favorite)
+            ivFavorite.setOnClickListener {
+                homeViewModel.getFavorite().observe(viewLifecycleOwner) {
+                    adapter.submitList(it)
+                }
+            }
         }
 
 //        viewModel.loading.observe(viewLifecycleOwner) {

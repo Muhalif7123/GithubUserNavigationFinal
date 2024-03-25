@@ -4,18 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.belajar.githubusernavigationfinal.R
 import com.belajar.githubusernavigationfinal.data.entity.UserEntity
 import com.belajar.githubusernavigationfinal.data.response.ItemsItem
 import com.belajar.githubusernavigationfinal.databinding.ItemUserListBinding
 import com.belajar.githubusernavigationfinal.ui.DetailActivity
 import com.bumptech.glide.Glide
 
-class UserAdapter : ListAdapter<UserEntity, UserAdapter.UserViewHolder>(DIFF_CALLBACK) {
+class UserAdapter(private val onClickFavorite: (UserEntity) -> Unit) : ListAdapter<UserEntity, UserAdapter.UserViewHolder>(DIFF_CALLBACK) {
 
-    class UserViewHolder(private val binding: ItemUserListBinding) :
+    class UserViewHolder(val binding: ItemUserListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindItem(user: UserEntity) {
             binding.tvName.text = user.login
@@ -47,6 +49,25 @@ class UserAdapter : ListAdapter<UserEntity, UserAdapter.UserViewHolder>(DIFF_CAL
             val moveIntent = Intent(holder.itemView.context, DetailActivity::class.java)
             moveIntent.putExtra("id", viewHolderItem.login)
             holder.itemView.context.startActivity(moveIntent)
+        }
+        if (viewHolderItem.favorite) {
+            holder.binding.ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    holder.binding.ivFavorite.context,
+                    R.drawable.baseline_favorite_24
+                )
+            )
+
+        } else {
+            holder.binding.ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    holder.binding.ivFavorite.context,
+                    R.drawable.baseline_favorite_border_24
+                )
+            )
+        }
+        holder.binding.ivFavorite.setOnClickListener {
+            onClickFavorite(viewHolderItem)
         }
     }
     companion object {

@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,7 +44,6 @@ class DetailActivity : AppCompatActivity() {
 
 
         val apiId = intent.getStringExtra("id")
-        val apiLogin = intent.getStringExtra("login")
         viewModel.getDataComplete(apiId)
 
 //        viewModel.getDataComplete(apiId).observe(this) {
@@ -51,7 +51,6 @@ class DetailActivity : AppCompatActivity() {
 //        }
         viewModel.getFollowings(apiId)
         viewModel.getFollowers(apiId)
-        viewModel.getDataComplete(apiId)
 //        viewModel.dataDetail.observe(this) {
 //            setDataComplete(it)
 //        }
@@ -150,6 +149,15 @@ class DetailActivity : AppCompatActivity() {
         menuOpen.setOnClickListener {
             val open = Intent(Intent.ACTION_VIEW, Uri.parse(dataDetail.htmlUrl))
             startActivity(open)
+        }
+        binding.fabShare.setOnClickListener{
+            val share = Intent(Intent.ACTION_SEND)
+            val shareText = "Visit this github profile: "
+            share.putExtra(Intent.EXTRA_SUBJECT, "Github Account")
+            share.putExtra(Intent.EXTRA_TEXT,  "$shareText ${dataDetail.htmlUrl}")
+            share.setType("text/plain")
+            startActivity(Intent.createChooser(share, "Share to"))
+
         }
     }
 

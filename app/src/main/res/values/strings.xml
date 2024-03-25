@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Github User Navigation</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="title_setting">Setting</string>
+    <string name="search">Search</string>
+    <string name="view">View</string>
+    <string name="followers">%d Followers</string>
+    <string name="followings">%d Followings</string>
+    <string name="follower">FOLLOWERS</string>
+    <string name="following">FOLLOWINGS</string>
+    <string name="search_user">Cari Username</string>
+    <string name="open">Buka</string>
+    <string name="text_hello">Welcome, Hello</string>
+    <string name="text_name">Guest</string>
+    <string name="text_opengit">Open in Github</string>
+    <string name="text_change">Change your profile</string>
+    <string name="text_github_app">Open Github App</string>
+    <string name="name">Name</string>
+    <string name="choose_photo">Choose a photo</string>
+    <string name="save">Simpan</string>
+    <string name="github_username">Github Username</string>
+    <string name="dark_mode">Dark Mode</string>
+</resources>

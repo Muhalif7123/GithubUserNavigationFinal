@@ -1,0 +1,36 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.GithubUserNavigation" parent="Theme.Material3.DayNight">
+        <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">@color/white_darker</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorOnPrimaryFixedVariant">@color/card_color_night</item>
+        <item name="colorSecondary">@color/orange</item>
+        <item name="colorSecondaryVariant">@color/lighter_orange</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/orange</item>
+        <item name="colorPrimaryFixedDim">@color/white</item>
+
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
+
+    <style name="Theme.GithubUserNavigation.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar" >
+        <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">@color/white_darker</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorOnPrimaryFixedVariant">@color/card_color_night</item>
+        <item name="colorSecondary">@color/orange</item>
+        <item name="colorSecondaryVariant">@color/lighter_orange</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/orange</item>
+        <item name="colorPrimaryFixedDim">@color/white</item>
+    </style>
+
+
+</resources>

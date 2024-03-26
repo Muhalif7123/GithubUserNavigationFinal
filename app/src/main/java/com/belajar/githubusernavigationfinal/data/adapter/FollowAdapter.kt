@@ -9,30 +9,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.belajar.githubusernavigationfinal.data.entity.UserEntity
 import com.belajar.githubusernavigationfinal.data.response.ItemsItem
-import com.belajar.githubusernavigationfinal.data.response.UserResponse
 import com.belajar.githubusernavigationfinal.databinding.ItemUserListBinding
-import com.belajar.githubusernavigationfinal.databinding.LayoutHomeBinding
 import com.belajar.githubusernavigationfinal.ui.DetailActivity
 import com.bumptech.glide.Glide
 
 class FollowAdapter: ListAdapter<ItemsItem, FollowAdapter.ViewHolder>(DIFF_CALLBACK) {
 
-    companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<ItemsItem> =
-            object : DiffUtil.ItemCallback<ItemsItem>() {
-                override fun areItemsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
-                    return oldItem.login == newItem.login
-                }
-
-                @SuppressLint("DiffUtilEquals")
-                override fun areContentsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
-                    return oldItem == newItem
-                }
-
-            }
-    }
     class ViewHolder(val binding: ItemUserListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItem(user: ItemsItem) {
             binding.tvName.text = user.login
@@ -64,5 +47,20 @@ class FollowAdapter: ListAdapter<ItemsItem, FollowAdapter.ViewHolder>(DIFF_CALLB
             holder.itemView.context.startActivity(moveIntent)
         }
         holder.binding.ivFavorite.visibility = View.GONE
+    }
+
+    companion object {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<ItemsItem> =
+            object : DiffUtil.ItemCallback<ItemsItem>() {
+                override fun areItemsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
+                    return oldItem.login == newItem.login
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                override fun areContentsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
+                    return oldItem == newItem
+                }
+
+            }
     }
 }

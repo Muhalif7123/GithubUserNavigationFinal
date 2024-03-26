@@ -6,10 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.belajar.githubusernavigationfinal.ui.follow.FollowFragment
 
-class SectionPagerAdapter(activity: AppCompatActivity): FragmentStateAdapter(activity) {
+class SectionPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int = 2
-
 
     override fun createFragment(position: Int): Fragment {
         val fragment = FollowFragment()
@@ -17,7 +16,6 @@ class SectionPagerAdapter(activity: AppCompatActivity): FragmentStateAdapter(act
         fragment.arguments = bundle.apply {
             putInt(SECTION_NO, position)
         }
-
         return fragment
     }
 

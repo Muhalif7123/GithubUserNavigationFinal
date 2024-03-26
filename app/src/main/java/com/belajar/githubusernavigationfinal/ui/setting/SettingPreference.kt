@@ -10,13 +10,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "setting")
-class SettingPreference private constructor(private val dataStore: DataStore<Preferences>){
+
+class SettingPreference private constructor(private val dataStore: DataStore<Preferences>) {
 
     val DARK_MODE = booleanPreferencesKey("dark_mode")
 
     fun getDarkMode(): Flow<Boolean> {
         return dataStore.data.map {
-            it[DARK_MODE]?: false
+            it[DARK_MODE] ?: false
         }
     }
 
@@ -30,7 +31,7 @@ class SettingPreference private constructor(private val dataStore: DataStore<Pre
         @Volatile
         private var INSTANCE: SettingPreference? = null
         fun getInstance(dataStore: DataStore<Preferences>): SettingPreference {
-            return INSTANCE?: synchronized(this) {
+            return INSTANCE ?: synchronized(this) {
                 val instance = SettingPreference(dataStore)
                 INSTANCE = instance
                 instance

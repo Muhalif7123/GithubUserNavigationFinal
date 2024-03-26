@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.belajar.githubusernavigationfinal.R
 import com.belajar.githubusernavigationfinal.data.entity.UserEntity
-import com.belajar.githubusernavigationfinal.data.response.ItemsItem
 import com.belajar.githubusernavigationfinal.databinding.ItemUserListBinding
 import com.belajar.githubusernavigationfinal.ui.DetailActivity
 import com.bumptech.glide.Glide
 
-class UserAdapter(private val onClickFavorite: (UserEntity) -> Unit) : ListAdapter<UserEntity, UserAdapter.UserViewHolder>(DIFF_CALLBACK) {
+class UserAdapter(private val onClickFavorite: (UserEntity) -> Unit) :
+    ListAdapter<UserEntity, UserAdapter.UserViewHolder>(DIFF_CALLBACK) {
 
     class UserViewHolder(val binding: ItemUserListBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -33,15 +33,6 @@ class UserAdapter(private val onClickFavorite: (UserEntity) -> Unit) : ListAdapt
         return UserViewHolder(binding)
     }
 
-//    override fun getItemCount(): Int {
-//        return getList.size
-//    }
-
-//    fun setUserList(newList: List<ItemsItem>) {
-//        getList.clear()
-//        getList.addAll(newList)
-//    }
-
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val viewHolderItem = getItem(position)
         holder.bindItem(viewHolderItem)
@@ -50,6 +41,7 @@ class UserAdapter(private val onClickFavorite: (UserEntity) -> Unit) : ListAdapt
             moveIntent.putExtra("id", viewHolderItem.login)
             holder.itemView.context.startActivity(moveIntent)
         }
+
         if (viewHolderItem.favorite) {
             holder.binding.ivFavorite.setImageDrawable(
                 ContextCompat.getDrawable(
@@ -57,7 +49,6 @@ class UserAdapter(private val onClickFavorite: (UserEntity) -> Unit) : ListAdapt
                     R.drawable.baseline_favorite_24
                 )
             )
-
         } else {
             holder.binding.ivFavorite.setImageDrawable(
                 ContextCompat.getDrawable(
@@ -66,10 +57,12 @@ class UserAdapter(private val onClickFavorite: (UserEntity) -> Unit) : ListAdapt
                 )
             )
         }
+
         holder.binding.ivFavorite.setOnClickListener {
             onClickFavorite(viewHolderItem)
         }
     }
+
     companion object {
         val DIFF_CALLBACK: DiffUtil.ItemCallback<UserEntity> =
             object : DiffUtil.ItemCallback<UserEntity>() {

@@ -4,19 +4,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.belajar.githubusernavigationfinal.data.Result
-import com.belajar.githubusernavigationfinal.data.entity.UserEntity
 import com.belajar.githubusernavigationfinal.data.response.DataDetail
 import com.belajar.githubusernavigationfinal.data.response.ItemsItem
 import com.belajar.githubusernavigationfinal.data.retrofit.ApiConfig
-import com.belajar.githubusernavigationfinal.data.room.UserRepository
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailViewModel: ViewModel() {
+class DetailViewModel : ViewModel() {
 
     private val _followings = MutableLiveData<List<ItemsItem>>()
     val followings: LiveData<List<ItemsItem>> = _followings
@@ -29,7 +24,6 @@ class DetailViewModel: ViewModel() {
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
-
 
     fun getFollowings(apiId: String?) {
         _loading.value = true
@@ -57,15 +51,7 @@ class DetailViewModel: ViewModel() {
         })
 
     }
-//    fun getFollowings(apiId: String?): LiveData<Result<List<UserEntity>>> {
-//            return userRepository.getFollowings(apiId)
-//    }
-//    fun getFollowers(apiId: String?): LiveData<Result<List<UserEntity>>> {
-//        return userRepository.getFollowers(apiId)
-//    }
-//    fun getDataComplete(apiId: String?): LiveData<Result<List<UserEntity>>> {
-//        return userRepository.getDataComplete(apiId)
-//    }
+
     fun getFollowers(apiId: String?) {
         _loading.value = true
         val client = apiId?.let { ApiConfig.getApiConfig().getFollowers(it, 100) }
@@ -88,27 +74,26 @@ class DetailViewModel: ViewModel() {
                 Log.e(MainActivity.TAG, "on failure: ${t.message}")
             }
         })
-
     }
 
     fun getDataComplete(apiId: String?) {
         _loading.value = true
         val client = apiId?.let { ApiConfig.getApiConfig().getDetailUser(it) }
-            client?.enqueue(object : Callback<DataDetail> {
-                override fun onResponse(call: Call<DataDetail>, response: Response<DataDetail>) {
-                    _loading.value = false
-                    if (response.isSuccessful) {
-                        _dataDetail.value = response.body()
-                    } else {
-                        Log.e(MainActivity.TAG, "onFailure: ${response.message()}")
-                    }
+        client?.enqueue(object : Callback<DataDetail> {
+            override fun onResponse(call: Call<DataDetail>, response: Response<DataDetail>) {
+                _loading.value = false
+                if (response.isSuccessful) {
+                    _dataDetail.value = response.body()
+                } else {
+                    Log.e(MainActivity.TAG, "onFailure: ${response.message()}")
                 }
+            }
 
-                override fun onFailure(call: Call<DataDetail>, t: Throwable) {
-                    _loading.value = false
-                    Log.e(MainActivity.TAG, "on failure: ${t.message}")
-                }
-            })
+            override fun onFailure(call: Call<DataDetail>, t: Throwable) {
+                _loading.value = false
+                Log.e(MainActivity.TAG, "on failure: ${t.message}")
+            }
+        })
     }
 
 

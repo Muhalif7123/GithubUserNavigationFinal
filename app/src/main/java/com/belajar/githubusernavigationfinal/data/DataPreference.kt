@@ -7,7 +7,6 @@ class DataPreference(context: Context) {
 
     private val sharedPreference = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
-
     fun setData(model: DataModel) {
         val editor = sharedPreference.edit()
         editor.putString(NAME, model.name)
@@ -25,6 +24,7 @@ class DataPreference(context: Context) {
     companion object {
         private const val PREF_NAME = "pref"
         private const val NAME = "name"
-        private const val GITHUB_LINK ="github_link"
+        private const val GITHUB_LINK = "github_link"
     }
+
 }

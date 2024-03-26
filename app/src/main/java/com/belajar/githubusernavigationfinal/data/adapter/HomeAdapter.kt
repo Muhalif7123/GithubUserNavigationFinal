@@ -15,23 +15,10 @@ import com.belajar.githubusernavigationfinal.databinding.LayoutHomeBinding
 import com.belajar.githubusernavigationfinal.ui.DetailActivity
 import com.bumptech.glide.Glide
 
-class HomeAdapter(private val onClickFavorite: (UserEntity) -> Unit): ListAdapter<UserEntity, HomeAdapter.ViewHolder>(DIFF_CALLBACK) {
-
-
-//    private val getList = ArrayList<ItemsItem>()
-
-
+class HomeAdapter(private val onClickFavorite: (UserEntity) -> Unit) :
+    ListAdapter<UserEntity, HomeAdapter.ViewHolder>(DIFF_CALLBACK)
+{
     class ViewHolder(val binding: LayoutHomeBinding) : RecyclerView.ViewHolder(binding.root) {
-//        fun bindItem(item: ItemsItem) {
-//            binding.tvName.text = item.login
-//            Glide.with(binding.root.context)
-//                .load(item.avatarUrl)
-//                .into(binding.cvAvatar)
-//            binding.cardOpen.setOnClickListener {
-//                val moveIntent = Intent(Intent.ACTION_VIEW, Uri.parse(item.htmlUrl))
-//                itemView.context.startActivity(moveIntent)
-//            }
-//        }
         fun bindItem(user: UserEntity) {
             binding.tvName.text = user.login
             Glide.with(binding.root.context)
@@ -41,9 +28,7 @@ class HomeAdapter(private val onClickFavorite: (UserEntity) -> Unit): ListAdapte
                 val moveIntent = Intent(Intent.ACTION_VIEW, Uri.parse(user.htmlUrl))
                 itemView.context.startActivity(moveIntent)
             }
-
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,38 +40,31 @@ class HomeAdapter(private val onClickFavorite: (UserEntity) -> Unit): ListAdapte
         val viewHolder = getItem(position)
 
         holder.bindItem(viewHolder)
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             val moveIntent = Intent(holder.itemView.context, DetailActivity::class.java)
             moveIntent.putExtra("id", viewHolder.login)
             holder.itemView.context.startActivity(moveIntent)
         }
-            if (viewHolder.favorite) {
-                holder.binding.ivFavorite.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        holder.binding.ivFavorite.context,
-                        R.drawable.baseline_favorite_24
-                    )
+        if (viewHolder.favorite) {
+            holder.binding.ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    holder.binding.ivFavorite.context,
+                    R.drawable.baseline_favorite_24
                 )
+            )
+        } else {
+            holder.binding.ivFavorite.setImageDrawable(
+                ContextCompat.getDrawable(
+                    holder.binding.ivFavorite.context,
+                    R.drawable.baseline_favorite_border_24
+                )
+            )
+        }
 
-            } else {
-                holder.binding.ivFavorite.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        holder.binding.ivFavorite.context,
-                        R.drawable.baseline_favorite_border_24
-                    )
-                )
-            }
         holder.binding.ivFavorite.setOnClickListener {
             onClickFavorite(viewHolder)
         }
-
     }
-//    fun setUserList(newList: List<ItemsItem>) {
-//        getList.clear()
-//        getList.addAll(newList)
-//    }
-
-//    override fun getItemCount(): Int = getList.size
 
     companion object {
         val DIFF_CALLBACK: DiffUtil.ItemCallback<UserEntity> =

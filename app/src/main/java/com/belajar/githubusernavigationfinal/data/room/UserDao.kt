@@ -10,11 +10,12 @@ import com.belajar.githubusernavigationfinal.data.entity.UserEntity
 
 @Dao
 interface UserDao {
+
     @Query("SELECT * FROM user ORDER BY login DESC")
     fun getUser(): LiveData<List<UserEntity>>
 
-    @Query("SELECT * FROM user ORDER BY favorite = 0 DESC")
-    fun getUserByNoFavorite(): LiveData<List<UserEntity>>
+    @Query("SELECT * FROM user WHERE login LIKE '%' || :keyword || '%' ORDER BY login ASC")
+    fun getUserByNoFavorite(keyword: String): LiveData<List<UserEntity>>
 
     @Query("SELECT * FROM user WHERE favorite = 1")
     fun getUserFavorite(): LiveData<List<UserEntity>>

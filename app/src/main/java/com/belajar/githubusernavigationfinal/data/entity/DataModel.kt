@@ -7,4 +7,4 @@ import kotlinx.parcelize.Parcelize
 data class DataModel(
     var name: String? = "",
     var githubLink: String? = ""
-): Parcelable
+) : Parcelable

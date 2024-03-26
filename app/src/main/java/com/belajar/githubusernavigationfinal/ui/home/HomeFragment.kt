@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.belajar.githubusernavigationfinal.R
 import com.belajar.githubusernavigationfinal.ViewModelFactory
@@ -22,7 +21,6 @@ import com.belajar.githubusernavigationfinal.data.DataPreference
 import com.belajar.githubusernavigationfinal.data.Result
 import com.belajar.githubusernavigationfinal.data.adapter.HomeAdapter
 import com.belajar.githubusernavigationfinal.data.entity.DataModel
-import com.belajar.githubusernavigationfinal.data.response.ItemsItem
 import com.belajar.githubusernavigationfinal.databinding.FragmentHomeBinding
 import com.belajar.githubusernavigationfinal.ui.DataFormActivity
 import com.belajar.githubusernavigationfinal.ui.setting.SettingPreference
@@ -35,29 +33,24 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-//    private val viewModel: HomeViewModel by viewModels()
 
     private lateinit var dataModel: DataModel
     private lateinit var mDataPreference: DataPreference
 
     private var showFavoritesOnly = false
 
-
-
-
     private val resultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ){
-            if (it?.data != null && it.resultCode == DataFormActivity.RESULT_CODE) {
-                val dataModel = it.data?.getParcelableExtra<DataModel>(DataFormActivity.EXTRA_RESULT) as DataModel
-                populateView(dataModel)
-                }
+    ) {
+        if (it?.data != null && it.resultCode == DataFormActivity.RESULT_CODE) {
+            val dataModel =
+                it.data?.getParcelableExtra<DataModel>(DataFormActivity.EXTRA_RESULT) as DataModel
+            populateView(dataModel)
+        }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -66,31 +59,38 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val settingPreference = SettingPreference.getInstance(requireActivity().application.dataStore)
-        val darkModeViewModel = ViewModelProvider(this, ViewModelFactory(settingPreference = settingPreference))[SettingViewModel::class.java]
-        binding.rvContainer.layoutManager = LinearLayoutManager(requireContext())
-
-        binding.cardHello.btnChange.setOnClickListener {
-            val intent = Intent(requireActivity(), DataFormActivity::class.java)
-            resultLauncher.launch(intent)
-        }
+        val settingPreference =
+            SettingPreference.getInstance(requireActivity().application.dataStore)
+        val darkModeViewModel = ViewModelProvider(
+            this, ViewModelFactory(settingPreference = settingPreference)
+        )[SettingViewModel::class.java]
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
         val viewModel: HomeViewModel by viewModels {
             factory
         }
 
+
         val homeAdapter = HomeAdapter {
-            if (it.favorite){
+            if (it.favorite) {
                 viewModel.deleteUser(it)
             } else {
                 viewModel.saveUser(it)
             }
         }
-        binding.btnFavorite.cardFavorite.setOnClickListener{
+
+        binding.rvContainer.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvContainer.adapter = homeAdapter
+
+
+        binding.cardHello.btnChange.setOnClickListener {
+            val intent = Intent(requireActivity(), DataFormActivity::class.java)
+            resultLauncher.launch(intent)
+        }
+
+        binding.btnFavorite.cardFavorite.setOnClickListener {
             showFavoritesOnly = !showFavoritesOnly
 
-            // Update the UI based on the flag
             if (showFavoritesOnly) {
                 viewModel.getFavorite().observe(viewLifecycleOwner) {
                     homeAdapter.submitList(it)
@@ -102,6 +102,7 @@ class HomeFragment : Fragment() {
                             homeAdapter.submitList(result.data)
                             binding.progressBar.visibility = View.GONE
                         }
+
                         is Result.Failure -> {
                             binding.progressBar.visibility = View.GONE
                             Toast.makeText(
@@ -110,17 +111,18 @@ class HomeFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+
                         Result.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                         }
                     }
                 }
             }
-
         }
+
         viewModel.getData().observe(viewLifecycleOwner) {
-            if (it!= null){
-                when (it){
+            if (it != null) {
+                when (it) {
                     is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
 
                     is Result.Success -> {
@@ -128,6 +130,7 @@ class HomeFragment : Fragment() {
                         val userData = it.data
                         homeAdapter.submitList(userData)
                     }
+
                     is Result.Failure -> {
                         binding.progressBar.visibility = View.GONE
                         Toast.makeText(
@@ -138,14 +141,7 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-
         }
-        binding.rvContainer.apply {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = homeAdapter
-        }
-
 
         binding.btnDarkMode.cardDark.setOnClickListener {
             darkModeViewModel.getDarkMode().observe(viewLifecycleOwner) {
@@ -155,43 +151,39 @@ class HomeFragment : Fragment() {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 }
             }
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-            darkModeViewModel.saveDarkMode(currentNightMode != Configuration.UI_MODE_NIGHT_YES)
+
+            val default =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            darkModeViewModel.saveDarkMode(default != Configuration.UI_MODE_NIGHT_YES)
         }
 
-
-
-        binding.cardHello.ivWaving.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.waving)
-
-//        viewModel.data.observe(viewLifecycleOwner) {
-//            setRecyclerView(it)
-//        }
-        viewModel.loading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-        /**
-         * hapus kalau gak guna
-         */
+        binding.cardHello.ivWaving.animation =
+            AnimationUtils.loadAnimation(requireContext(), R.anim.waving)
 
         mDataPreference = DataPreference(requireActivity())
         getData()
     }
 
 
-
-
     fun populateView(dataModel: DataModel) {
-        binding.cardHello.tvName.text = if (dataModel.name.toString().isEmpty()) "Guest" else dataModel.name
+        binding.cardHello.tvName.text =
+            if (dataModel.name.toString().isEmpty()) "Guest" else dataModel.name
 
         binding.btnGithub.cardGithub.setOnClickListener {
             if (dataModel.githubLink.toString().isEmpty()) {
-                Toast.makeText(requireActivity(), "Configure Your Profile First", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireActivity(), "Configure Your Profile First", Toast.LENGTH_SHORT
+                ).show()
             } else {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/${dataModel.githubLink}"))
+                val intent = Intent(
+                    Intent.ACTION_VIEW, Uri.parse("https://github.com/${dataModel.githubLink}")
+                )
                 startActivity(intent)
             }
         }
-        binding.cardHello.tvUsername.text = if (dataModel.githubLink.toString().isEmpty()) "Github Username: -" else "Github Username: ${dataModel.githubLink}"
+        binding.cardHello.tvUsername.text = if (dataModel.githubLink.toString()
+                .isEmpty()
+        ) "Github Username: -" else "Github Username: ${dataModel.githubLink}"
     }
 
     private fun getData() {
@@ -199,23 +191,11 @@ class HomeFragment : Fragment() {
         populateView(dataModel)
     }
 
-//    private fun setRecyclerView(items: List<ItemsItem>) {
-//        val adapter = HomeAdapter()
-//        adapter.setUserList(items)
-//        binding.rvContainer.adapter = adapter
-//    }
-
-    private fun showLoading(value: Boolean) {
-        if (value) binding.progressBar.visibility =
-            View.VISIBLE else binding.progressBar.visibility = View.INVISIBLE
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-
-    }
+}
 
 

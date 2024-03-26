@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.belajar.githubusernavigationfinal.data.entity.UserEntity
 
-@Database(entities = [UserEntity::class], version = 3, exportSchema = false)
-abstract class UserDatabase: RoomDatabase() {
+@Database(entities = [UserEntity::class], version = 4, exportSchema = false)
+abstract class UserDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
 
@@ -22,9 +22,6 @@ abstract class UserDatabase: RoomDatabase() {
                     "UserDB"
                 ).fallbackToDestructiveMigration().build()
             }
-
     }
-
-
 
 }

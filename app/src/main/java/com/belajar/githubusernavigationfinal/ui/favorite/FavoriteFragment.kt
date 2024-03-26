@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.belajar.githubusernavigationfinal.ViewModelFactory
 import com.belajar.githubusernavigationfinal.data.adapter.HomeAdapter
@@ -32,16 +31,18 @@ class FavoriteFragment : Fragment() {
         val factory = ViewModelFactory.getInstance(requireActivity())
         val viewModel: HomeViewModel by viewModels { factory }
 
-        val homeAdapter = HomeAdapter{
+        val homeAdapter = HomeAdapter {
             if (it.favorite) {
                 viewModel.deleteUser(it)
             } else {
                 viewModel.saveUser(it)
             }
         }
+
         val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvContainerFavorite.adapter = homeAdapter
         binding.rvContainerFavorite.layoutManager = layoutManager
+
         viewModel.getFavorite().observe(viewLifecycleOwner) {
             binding.progressBar.visibility = View.GONE
             homeAdapter.submitList(it)

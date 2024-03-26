@@ -12,10 +12,9 @@ import com.belajar.githubusernavigationfinal.databinding.ActivityDataFormBinding
 
 class DataFormActivity : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var binding : ActivityDataFormBinding
+    private lateinit var binding: ActivityDataFormBinding
     private lateinit var dataModel: DataModel
     private lateinit var dataPreference: DataPreference
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +27,10 @@ class DataFormActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v?.id) {
+        when (v?.id) {
             R.id.btn_save -> saveData()
         }
     }
-
 
     private fun saveData() {
         val name = binding.edName.text.toString().trim()
@@ -45,14 +43,17 @@ class DataFormActivity : AppCompatActivity(), View.OnClickListener {
             binding.edGithub.setText("")
             return
         }
+
         saveDataToPreference(name, githubLink)
         Toast.makeText(this, "Profile Changed", Toast.LENGTH_SHORT).show()
 
         val resultIntent = Intent().apply {
             putExtra(EXTRA_RESULT, dataModel)
         }
+
         setResult(RESULT_CODE, resultIntent)
         finish()
+
     }
 
 
@@ -60,14 +61,12 @@ class DataFormActivity : AppCompatActivity(), View.OnClickListener {
         dataPreference = DataPreference(this)
         dataModel.name = name
         dataModel.githubLink = githubLink
-
         dataPreference.setData(dataModel)
     }
-
-
 
     companion object {
         const val EXTRA_RESULT = "extra_result"
         const val RESULT_CODE = 101
     }
+
 }

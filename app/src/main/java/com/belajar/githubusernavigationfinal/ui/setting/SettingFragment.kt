@@ -5,32 +5,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.belajar.githubusernavigationfinal.R
 import com.belajar.githubusernavigationfinal.ViewModelFactory
-import com.belajar.githubusernavigationfinal.data.DataPreference
 import com.belajar.githubusernavigationfinal.data.entity.DataModel
 import com.belajar.githubusernavigationfinal.databinding.FragmentSettingBinding
 import com.belajar.githubusernavigationfinal.ui.DataFormActivity
 import com.belajar.githubusernavigationfinal.ui.home.HomeFragment
 
 
-class SettingFragment : Fragment(), View.OnClickListener {
+class SettingFragment : Fragment() {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
 
     private val resultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ){
+    ) {
         if (it?.data != null && it.resultCode == DataFormActivity.RESULT_CODE) {
-            val dataModel = it.data?.getParcelableExtra<DataModel>(DataFormActivity.EXTRA_RESULT) as DataModel
+            val dataModel =
+                it.data?.getParcelableExtra<DataModel>(DataFormActivity.EXTRA_RESULT) as DataModel
+
             try {
                 HomeFragment().populateView(dataModel)
             } catch (e: NullPointerException) {
@@ -51,8 +48,13 @@ class SettingFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val settingPreference = SettingPreference.getInstance(requireActivity().application.dataStore)
-        val viewModel = ViewModelProvider(this, ViewModelFactory(settingPreference = settingPreference))[SettingViewModel::class.java]
+        val settingPreference =
+            SettingPreference.getInstance(requireActivity().application.dataStore)
+
+        val viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(settingPreference = settingPreference)
+        )[SettingViewModel::class.java]
 
         viewModel.getDarkMode().observe(viewLifecycleOwner) {
             if (it) {
@@ -77,12 +79,6 @@ class SettingFragment : Fragment(), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onClick(v: View?) {
-        when(v?.id) {
-
-        }
     }
 
 }

@@ -1,4 +1,6 @@
 # Github User Navigation Final 
+![Copy of Copy of Copy of Copy of Red Black Simple Gradients Technology in Business and at Work Technology Presentation(1)](https://github.com/malivee/GithubUserNavigationFinal/assets/100111548/b2c2b651-feee-422f-8e71-7a3bf9f42d04)
+
 ***As a final submission task on Dicoding platform of the Fundamental Android Course***<br>
 *I finalized GitHub app that previously contained:*<br>
 - SplashScreen
